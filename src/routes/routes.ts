@@ -33,31 +33,6 @@ class Routes {
         await db.desconectarBD()
     }
 
-    private getEquipo = async (req:Request, res: Response) => {
-        const { id } = req.params
-        await db.conectarBD()
-        .then( async ()=> {
-            const query = await Vehiculos.aggregate([
-                {
-                    $lookup: {
-                        from: 'jugadores',
-                        localField: 'id',
-                        foreignField: 'equipo',
-                        as: "jugadores"
-                    }
-                },{
-                    $match: {
-                        id:id
-                    }
-                }
-            ])
-            res.json(query)
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-        })
-        await db.desconectarBD()
-    }
     // Recibe un documento equipo en el body con los campos indicados aquí 
     private postTrabajador = async (req: Request, res: Response) => {
         const { tipoT, DNI, nombre, apellidos, fechaNac, horasSem, salHora, especialidad, vehiculo } = req.body
